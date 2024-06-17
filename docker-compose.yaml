@@ -1,0 +1,32 @@
+version: '3.1'
+services:
+  web:
+    image: odoo:17.0
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+      - ./config_odoo:/etc/odoo
+      - ./dev_addons:/mnt/extra-addons
+      - ./log:/var/log/odoo
+       - ./entrypoint.sh:/entrypoint.sh  # Montar entrypoint.sh en el contenedor
+      - ./wait-for-psql.py:/wait-for-psql.py  # Montar wait-for-psql.py en el contenedor
+    environment:
+      - POSTGRES_HOST=3.144.85.247
+      - USER=openpg
+      - PASSWORD=123
+    entrypoint: ["sh", "/entrypoint.sh"]  # Esto es importante para ejecutar el script de espera
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=postgres 
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_USER=openpg
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data/pgdata
+volumes:
+  odoo-web-data:
+  odoo-db-data:

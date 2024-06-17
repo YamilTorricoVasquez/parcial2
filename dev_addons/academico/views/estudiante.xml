@@ -1,0 +1,57 @@
+<odoo>
+    <data>
+        
+        <record id="view_estudiante_form" model="ir.ui.view">
+            <field name="name">academico estudiante form</field>
+            <field name="model">academico.estudiante</field>
+            <field name="arch" type="xml">
+                <form string="Estudiante">
+                    <group>
+                       
+                        <field name="name"/>
+                        <field name="ci"/>
+                        
+                        <field name="email"/>
+                        <field name="phone"/>
+                        <field name="curso_id"/>
+                        <field name="nivel_id"/>
+                        <field name="gestion"/>
+                        <field name="tutor_id"/>
+                        <field name="ci_tutor"/>
+                        <field name="horario_ids"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+      
+      <record id="view_estudiante_tree" model="ir.ui.view">
+        <field name="name">academico estudiante list</field>
+        <field name="model">academico.estudiante</field>
+        <field name="arch" type="xml">
+            <tree string="Estudiante">
+            
+                <field name="name"/>
+                <field name="ci"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="curso_id"/>
+                <field name="nivel_id"/>
+                <field name="gestion"/>
+                <field name="tutor_id"/>
+                <field name="ci_tutor"/>
+
+                
+            </tree>
+        </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="academico.action_estudiante_window">
+        <field name="name">Registro de estudiantes</field>
+        <field name="res_model">academico.estudiante</field>
+        <field name="view_mode">tree,form</field>
+      </record>
+      
+      <menuitem name="Estudiantes" id="academico.menu_1_estudiante_list" parent="academico.menu_1"
+      action="academico.action_estudiante_window"/>
+    </data>
+</odoo>
