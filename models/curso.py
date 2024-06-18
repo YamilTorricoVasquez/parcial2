@@ -15,22 +15,22 @@ class Curso(models.Model):
     profesor_id = fields.One2many('academico.profesor', 'curso_id', string='Profesor', readonly=True)
     horario_ids = fields.One2many('academico.horario', 'name', string='Horarios')
     _sql_constraints = [
-        ('aula_curso_nivel_uniq', 'unique(aula_id)', 'Ya existe un curso en esta aula con el mismo nivel.'),
+    ('aula_curso_nivel_uniq', 'unique(aula_id, nivel)', 'Ya existe un curso en esta aula con el mismo nivel.'),
     ]
 
-    @api.constrains('aula_id', 'nivel')
+    @api.constrains('nivel', 'aula_id')
     def _check_aula_nivel(self):
         for curso in self:
-            if curso.aula_id and curso.nivel:
-                cursos_otra_aula_nivel = self.search([
-                    ('aula_id', '!=', curso.aula_id.id),
-                    ('nivel', '=', curso.nivel),
-                    ('id', '!=', curso.id),
-                ])
-                if cursos_otra_aula_nivel:
-                    raise exceptions.ValidationError(
-                        "Ya existe un curso con el mismo nivel en otra aula."
-                    )
+            if curso.nivel and curso.aula_id:
+                cursos_misma_aula_nivel = self.search([
+                ('nivel', '=', curso.nivel),
+                ('aula_id', '=', curso.aula_id.id),
+                ('id', '!=', curso.id),
+            ])
+            if cursos_misma_aula_nivel:
+                raise exceptions.ValidationError(
+                    "Ya existe un curso con el mismo nivel en esta aula."
+                )
 
     @api.constrains('materia_ids')
     def _check_materias(self):
