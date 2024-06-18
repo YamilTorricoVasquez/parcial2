@@ -11,7 +11,7 @@
                             <!-- <field name="name"/> -->
                             <field name="estudiante_id"/>
                             <field name="curso_id" readonly="1"/>
-                            <field name="materia_id" domain="[('id', 'in', materia_id)]"/>
+                            <field name="materia_id" />
                             <field name="trimestre"/>
                             <field name="anio" />
                             <field name="nota"/>
