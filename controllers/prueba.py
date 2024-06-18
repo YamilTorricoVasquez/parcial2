@@ -1,8 +1,9 @@
+import json
 from odoo import http
 from odoo.http import request
 
 class HelloApi(http.Controller):
-    @http.route('/api', auth='public', website=False, csrf=False, type='json', methods=['GET'], cors='*')
+    @http.route('/api', auth='public', website=False, csrf=False, type='http', methods=['GET'], cors='*')
     def hello(self, **kw):
         estudiantes = request.env['academico.estudiante'].sudo().search([])
         est_list = []
@@ -14,8 +15,11 @@ class HelloApi(http.Controller):
                 'phone': est.phone,
                 'curso_id': est.curso_id.name
             })
-        return {
-            'status': 200,
-            'message': 'Success',
-            'data': est_list
-        }
+        return request.make_response(
+            json.dumps({
+                'status': 200,
+                'message': 'Success',
+                'data': est_list
+            }),
+            headers={'Content-Type': 'application/json'}
+        )
