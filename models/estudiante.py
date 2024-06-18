@@ -5,14 +5,14 @@ class Estudiante(models.Model):
     _description = 'Estudiante'
 
     name = fields.Char(string='Nombre completo', required=True)
-    ci = fields.Char(string='Cedula de identidad', required=True)
+    ci = fields.Char(string='Cedula de identidad', required=True, size=7)
     email = fields.Char(string='Email')
-    phone = fields.Char(string='Teléfono')
+    phone = fields.Char(string='Teléfono', size=8)
     gestion = fields.Date(string = 'Año', required=True)
     curso_id = fields.Many2one('academico.curso', string='Curso', required=True)
     nivel_id = fields.Selection(related='curso_id.nivel',string="Nivel")
     tutor_id=fields.Char(string='Nombre del tutor', required=True)
-    ci_tutor=fields.Char(string='Cedula de identidad tutor', required=True)
+    ci_tutor=fields.Char(string='Cedula de identidad tutor', required=True, size=7)
     horario_ids = fields.One2many(related='curso_id.horario_ids', string='Horarios', readonly=True)
     boletin_ids = fields.One2many('academico.boletin', 'estudiante_id', string='Boletines')
     @api.constrains('curso_id')

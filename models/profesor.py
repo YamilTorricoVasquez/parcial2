@@ -5,9 +5,9 @@ class Profesor(models.Model):
     _description = 'Profesor'
 
     name = fields.Char(string='Nombre completo', required=True)
-    ci = fields.Char(string='Cedula de identidad', required=True, unique=True)
-    email = fields.Char(string='Correo electronico')
-    phone = fields.Char(string='Teléfono', required=True)
+    ci = fields.Char(string='Cedula de identidad', required=True, unique=True, size=7)
+    email = fields.Char(string='Correo electronico',required=True)
+    phone = fields.Char(string='Teléfono', required=True, size=8)
     curso_id = fields.Many2one('academico.curso', string='Curso')
     nivel = fields.Selection(related='curso_id.nivel', string='Nivel', readonly=True)
     Lista_estudiantes = fields.Many2many('academico.estudiante', compute='_compute_lista_estudiantes', string='Lista estudiantes')
