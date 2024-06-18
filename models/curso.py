@@ -15,7 +15,7 @@ class Curso(models.Model):
     profesor_id = fields.One2many('academico.profesor', 'curso_id', string='Profesor', readonly=True)
     horario_ids = fields.One2many('academico.horario', 'name', string='Horarios')
     _sql_constraints = [
-        ('aula_curso_nivel_uniq', 'unique(aula_id, nivel)', 'Ya existe un curso en esta aula con el mismo nivel.'),
+        ('aula_curso_nivel_uniq', 'unique(aula_id)', 'Ya existe un curso en esta aula con el mismo nivel.'),
     ]
 
     @api.constrains('aula_id', 'nivel')
