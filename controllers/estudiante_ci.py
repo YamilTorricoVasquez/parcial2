@@ -3,7 +3,7 @@ from odoo.http import request
 
 class EstudianteController(http.Controller):
 
-    @http.route('/api/estudiantes/<string:ci>', type='json', auth='public', methods=['GET'], csrf=False)
+    @http.route('/api/estudiantes/<string:ci>', type='http', auth='public', methods=['GET'], csrf=False)
     def get_estudiante_por_ci(self, ci, **kwargs):
         if not ci:
             return {'status': 400, 'message': 'Cédula es requerida'}
