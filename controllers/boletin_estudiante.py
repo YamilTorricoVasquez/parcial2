@@ -4,24 +4,23 @@ import json
 
 class BoletinAPI(http.Controller):
 
-    @http.route('/api/boletin/<string:ci>', type='http', auth='none', methods=['GET'])
-    def get_boletin_by_ci(self, ci, **kwargs):
+    @http.route('/api/boletin', auth='public', website=False, csrf=False, type='http', methods=['GET'], cors='*')
+    def get_boletines(self, **kw):
         try:
-            student = request.env['academico.estudiante'].sudo().search([('ci', '=', ci)])
-            if not student:
-                return json.dumps({'error': 'Estudiante no encontrado'})
-            
-            boletin_ids = student.boletin_ids.ids
+            boletines = request.env['academico.boletin'].sudo().search([])
+
             boletin_data = []
-            for boletin_id in boletin_ids:
-                boletin = request.env['academico.boletin'].sudo().browse(boletin_id)
+            for boletin in boletines:
                 boletin_data.append({
+                    'estudiante': boletin.estudiante_id.name,
+                    'ci_estudiante': boletin.ci_estudiante,
                     'curso': boletin.curso_id.name,
-                    'promedio': boletin.promedio,
+                    'nivel': boletin.nivel_id,
+                    'notas': [{'nombre': nota.name, 'valor': nota.valor} for nota in boletin.nota_ids],
                     'estado_aprobacion': boletin.estado_aprobacion,
-                    # Agrega más campos según sea necesario
+                    'promedio': boletin.promedio,
                 })
-            
+
             return json.dumps({'boletines': boletin_data})
 
         except Exception as e:
