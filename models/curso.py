@@ -9,7 +9,7 @@ class Curso(models.Model):
         ('primaria', 'Primaria'),
         ('secundaria', 'Secundaria')
     ], string='Nivel', required=True)
-    materia_ids = fields.Many2many('academico.materia', string='Materias', required=True)
+    materia_ids = fields.Many2many('academico.materia', string='Materias')
     aula_id = fields.Many2one('academico.aula', string='Aula', required=True)
     estudiante_ids = fields.One2many('academico.estudiante', 'curso_id', string='Estudiantes', readonly=True)
     profesor_id = fields.One2many('academico.profesor', 'curso_id', string='Profesor', readonly=True)

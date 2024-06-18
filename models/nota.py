@@ -7,8 +7,8 @@ class Nota(models.Model):
     boletin_id = fields.Many2one('academico.boletin', string='Boletín')
     estudiante_id = fields.Many2one('academico.estudiante', string='Estudiante', required=True)
     curso_id = fields.Many2one(related='estudiante_id.curso_id', string='Curso')
-    #materia_id = fields.Many2one('academico.materia', string='Materia', required=True)
-    materia_id = fields.Char( string='Materia', required=True,related='curso_id.materia_id')
+    materia_id = fields.Many2one('academico.materia', string='Materia', required=True)
+    
     nota = fields.Float(string='Nota', required=True)
     trimestre = fields.Selection([('1', '1er Trimestre'), ('2', '2do Trimestre'), ('3', '3er Trimestre')], string='Trimestre', required=True)
     anio= fields.Date(string='año', required=True)
@@ -16,18 +16,7 @@ class Nota(models.Model):
         ('unique_materia_trimestre', 'UNIQUE(materia_id, trimestre)', 'Ya existe una nota para esta materia en este trimestre.'),
         ('check_notas_limit', 'CHECK(_check_notas_limit())', 'No se pueden agregar más de 3 notas para una materia.'),
     ]
-    @api.onchange('estudiante_id')
-    def _onchange_estudiante_id(self):
-        if self.estudiante_id:
-            self.curso_id = self.estudiante_id.curso_id.id
-
-    @api.depends('curso_id')
-    def _compute_materia_domain(self):
-        for record in self:
-            if record.curso_id:
-                record.materia_ids = record.curso_id.materia_ids.ids
-            else:
-                record.materia_ids = [(5, 0, 0)]  # Vaciar el campo si no hay curso seleccionado
+   
     
     def _check_notas_limit(self):
         for nota in self:
