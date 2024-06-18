@@ -7,8 +7,8 @@ class Nota(models.Model):
     boletin_id = fields.Many2one('academico.boletin', string='Boletín')
     estudiante_id = fields.Many2one('academico.estudiante', string='Estudiante', required=True)
     curso_id = fields.Many2one(related='estudiante_id.curso_id', string='Curso')
-    materia_id = fields.Many2one('academico.materia', string='Materia', required=True)
-    
+    #materia_id = fields.Many2one('academico.materia', string='Materia', required=True)
+    materia_id = fields.Many2one('academico.materia', string='Materia', required=True, domain="[('id', 'in', materia_ids)]")
     nota = fields.Float(string='Nota', required=True)
     trimestre = fields.Selection([('1', '1er Trimestre'), ('2', '2do Trimestre'), ('3', '3er Trimestre')], string='Trimestre', required=True)
     anio= fields.Date(string='año', required=True)
@@ -16,7 +16,15 @@ class Nota(models.Model):
         ('unique_materia_trimestre', 'UNIQUE(materia_id, trimestre)', 'Ya existe una nota para esta materia en este trimestre.'),
         ('check_notas_limit', 'CHECK(_check_notas_limit())', 'No se pueden agregar más de 3 notas para una materia.'),
     ]
+    @api.depends('curso_id')
+    def _compute_materia_ids(self):
+        for nota in self:
+            if nota.curso_id:
+                nota.materia_ids = nota.curso_id.materia_ids
 
+    materia_ids = fields.Many2many('academico.materia', compute='_compute_materia_ids', string='Materias')
+    
+    
     def _check_notas_limit(self):
         for nota in self:
             count = self.env['academico.nota'].search_count([
