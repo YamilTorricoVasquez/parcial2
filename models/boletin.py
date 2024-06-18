@@ -1,4 +1,3 @@
-         
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
@@ -72,4 +71,3 @@ class Boletin(models.Model):
         else:
             self.curso_id = False
             self.nivel_id = False
-
