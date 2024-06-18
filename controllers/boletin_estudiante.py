@@ -3,7 +3,7 @@ from odoo.http import request
 
 class BoletinController(http.Controller):
 
-    @http.route('/api/boletin/<string:ci>', type='http', auth='public', methods=['GET'], csrf=False, cors='*')
+    @http.route('/api/boletin/<string:ci>', type='json', auth='public', methods=['GET'], csrf=False, cors='*')
     def buscar_boletin_por_ci(self, ci, **kwargs):
         try:
             if not ci:
