@@ -12,7 +12,7 @@
                              
                             <field name="curso_id" readonly="1"/>
                             <field name="nivel_id" readonly="1"/>
-                            <field name="año" />
+                            <field name="gestion" />
                              <field name="nota_ids"   /> 
                             <field name="promedio"/>
                             <!-- <field name="mat" /> -->
@@ -45,7 +45,7 @@
                     <field name="ci_estudiante" readonly="1"/> 
                     <field name="curso_id" readonly="1"/>
                     <field name="nivel_id" readonly="1"/>
-                    <field name="año"/>
+                    <field name="gestion"/>
                     <!-- <field name="notas_materias_trimestres" /> -->
                         
                         <field name="materias_id" />
