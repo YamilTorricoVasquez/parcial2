@@ -14,6 +14,7 @@ class Estudiante(models.Model):
     tutor_id=fields.Char(string='Nombre del tutor', required=True)
     ci_tutor=fields.Char(string='Cedula de identidad tutor', required=True)
     horario_ids = fields.One2many(related='curso_id.horario_ids', string='Horarios', readonly=True)
+    boletin_ids = fields.One2many('academico.boletin', 'estudiante_id', string='Boletines')
     @api.constrains('curso_id')
     def _check_classroom_capacity(self):
         for student in self:

@@ -19,6 +19,8 @@
                         <field name="tutor_id"/>
                         <field name="ci_tutor"/>
                         <field name="horario_ids"/>
+                        <field name="boletin_ids"/>
+                        
                     </group>
                 </form>
             </field>
