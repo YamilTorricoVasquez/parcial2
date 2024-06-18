@@ -21,11 +21,11 @@ class Profesor(models.Model):
     _sql_constraints = [
         ('ci_unique', 'UNIQUE(ci)', 'La cédula de identidad debe ser única.')
     ]
-    @api.onchange('materia_ids')
-    def _onchange_materia_ids(self):
-        # Recorremos las materias asignadas al profesor
-        for materia in self.materia_ids:
-            # Verificamos si la materia ya tiene asignado este profesor
-            if materia.profesor_id.id != self.id:
-                # Si no lo tiene, actualizamos el profesor en la materia
-                materia.write({'profesor_id': self.id})
+    # @api.onchange('materia_ids')
+    # def _onchange_materia_ids(self):
+    #     # Recorremos las materias asignadas al profesor
+    #     for materia in self.materia_ids:
+    #         # Verificamos si la materia ya tiene asignado este profesor
+    #         if materia.profesor_id.id != self.id:
+    #             # Si no lo tiene, actualizamos el profesor en la materia
+    #             materia.write({'profesor_id': self.id})
