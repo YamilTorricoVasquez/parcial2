@@ -7,6 +7,7 @@ class Boletin(models.Model):
     _description = 'Boletín de Notas'
 
     estudiante_id = fields.Many2one('academico.estudiante', string='Estudiante', required=True)
+    ci_estudiante = fields.Char(string='CI Estudiante', related='estudiante_id.ci', readonly=True)
     curso_id = fields.Many2one('academico.curso', string='Curso', compute='_compute_curso', store=True)
     
     nivel_id = fields.Selection(related='curso_id.nivel',string='Nivel')

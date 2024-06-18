@@ -8,6 +8,8 @@
                     <sheet>
                         <group>
                              <field name="estudiante_id"/> 
+                             <field name="ci_estudiante" readonly="1"/> 
+                             
                             <field name="curso_id" readonly="1"/>
                             <field name="nivel_id" readonly="1"/>
                              <field name="nota_ids"   /> 
@@ -39,6 +41,7 @@
             <field name="arch" type="xml">
                 <tree string="Boletines">         
                     <field name="estudiante_id"/>
+                    <field name="ci_estudiante" readonly="1"/> 
                     <field name="curso_id" readonly="1"/>
                     <field name="nivel_id" readonly="1"/>
                     <!-- <field name="notas_materias_trimestres" /> -->
