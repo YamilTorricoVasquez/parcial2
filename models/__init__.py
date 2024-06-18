@@ -9,3 +9,4 @@ from . import horario
 from . import curso
 from . import nota
 from . import boletin
+from . import comunicado

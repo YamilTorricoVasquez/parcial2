@@ -6,3 +6,4 @@ from . import horario_estudiante
 from . import horario_profesor
 from . import prueba
 from . import boletin_estudiante
+from . import comunicado

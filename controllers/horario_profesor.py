@@ -1,32 +1,49 @@
 from odoo import http
 from odoo.http import request
+import json
 
-class ProfesorController(http.Controller):
+class HorarioController(http.Controller):
 
-    @http.route('/api/horario/profesor/<string:ci>', type='http', auth='public', methods=['GET'], csrf=False)
-    def get_horario_por_ci(self, ci, **kwargs):
-        if not ci:
-            return {'status': 400, 'message': 'Cédula es requerida'}
+    @http.route('/api/horario/profesor/<string:ci>', type='http', auth='none', methods=['GET'])
+    def get_horario_by_profesor(self, ci, **kwargs):
+        try:
+            # Buscar al profesor por su CI
+            profesor = request.env['academico.profesor'].sudo().search([('ci', '=', ci)])
+            if not profesor:
+                return json.dumps({'error': 'Profesor no encontrado'})
 
-        # Buscar al profesor por su cédula
-        profesor = request.env['academico.profesor'].sudo().search([('ci', '=', ci)], limit=1)
-        if not profesor:
-            return {'status': 404, 'message': 'Profesor no encontrado'}
+            # Obtener las materias asignadas al profesor
+            materias_profesor = profesor.materia_ids
+            if not materias_profesor:
+                return json.dumps({'error': 'El profesor no tiene materias asignadas'})
 
-        horario_data = []
-        # Buscar todas las materias asociadas al profesor
-        materias = request.env['academico.materia'].sudo().search([('profesor_id', '=', profesor.id)])
-        for materia in materias:
-            # Buscar los horarios asociados a la materia
-            horarios = request.env['academico.horario'].sudo().search([('materia_id', '=', materia.id)])
-            for horario in horarios:
-                horario_data.append({
-                    'curso': horario.curso_id.name,
-                    'nivel': horario.nivel_id,
-                    'materia': horario.materia_id.name,
-                    'aula': horario.aula_id.name,
-                    'start_time': horario.start_time.strftime('%Y-%m-%d %H:%M:%S') if horario.start_time else None,
-                    'end_time': horario.end_time.strftime('%Y-%m-%d %H:%M:%S') if horario.end_time else None,
-                })
+            # Obtener el curso del profesor
+            curso_profesor = profesor.curso_id
+            if not curso_profesor:
+                return json.dumps({'error': 'El profesor no tiene un curso asignado'})
 
-        return {'status': 200, 'data': horario_data}
+            # Buscar los horarios relacionados con las materias y curso del profesor
+            horarios_data = []
+            for materia in materias_profesor:
+                # Filtrar horarios por materia y curso del profesor
+                horarios = request.env['academico.horario'].sudo().search([
+                    ('materia_id', '=', materia.id),
+                    ('name', '=', curso_profesor.id)
+                ])
+                for horario in horarios:
+                    horarios_data.append({
+                        'curso': curso_profesor.name,
+                        'materia': materia.name,
+                        'nivel': horario.nivel_id,
+                        'aula': horario.aula_id.name,
+                        'start_time': horario.start_time.strftime('%Y-%m-%d %H:%M:%S'),
+                        'end_time': horario.end_time.strftime('%Y-%m-%d %H:%M:%S'),
+                    })
+
+            if not horarios_data:
+                return json.dumps({'error': 'No se encontraron horarios para las materias del profesor'})
+
+            return json.dumps({'horarios': horarios_data})
+
+        except Exception as e:
+            return json.dumps({'error': str(e)})

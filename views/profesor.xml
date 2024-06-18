@@ -14,6 +14,7 @@
                             <field name="phone"/>
                             <field name="curso_id"/>
                             <field name="nivel"/>
+                            <field name="materia_ids"/>
                             <field name="Lista_estudiantes"/>
                             
                             
@@ -36,6 +37,7 @@
                     <field name="phone"/>
                     <field name="curso_id"/>
                     <field name="nivel"/>
+                    <field name="materia_ids"/>
                     <field name="Lista_estudiantes"/>
                     
                 </tree>

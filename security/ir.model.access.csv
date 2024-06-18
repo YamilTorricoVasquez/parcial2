@@ -8,3 +8,4 @@ access_academico_aula,academico.aula,model_academico_aula,base.group_user,1,1,1,
 access_academico_curso,academico.curso,model_academico_curso,base.group_user,1,1,1,1
 access_academico_boletin,academico.boletin,model_academico_boletin,base.group_user,1,1,1,1
 access_academico_nota,academico.nota,model_academico_nota,base.group_user,1,1,1,1
+access_academico_comunicado,academico.comunicado,model_academico_comunicado,base.group_user,1,1,1,1

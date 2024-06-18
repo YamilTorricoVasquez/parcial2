@@ -33,6 +33,7 @@ Long description of module's purpose
         'views/curso.xml',
         'views/nota.xml',
         'views/boletin.xml',
+        'views/comunicado.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

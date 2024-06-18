@@ -1,0 +1,42 @@
+<odoo>
+    <data>
+        <record id="view_comunicado_form" model="ir.ui.view">
+            <field name="name">academico comunicado form</field>
+            <field name="model">academico.comunicado</field>
+            <field name="arch" type="xml">
+                <form string="comunicado">
+                    <sheet>
+                        <group>
+                            <field name="name"></field>
+                            <field name="fecha_publicacion"></field>
+                    <field name="contenido"></field>
+                   
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    
+        <record id="view_comunicado_tree" model="ir.ui.view">
+            <field name="name">academico comunicado list</field>
+            <field name="model">academico.comunicado</field>
+            <field name="arch" type="xml">
+                <tree string="comunicado">
+                    <field name="name"></field>
+                    <field name="fecha_publicacion"></field>
+                    <field name="contenido"></field>
+                    
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="academico.action_comunicado_window">
+            <field name="name">Crear comunicado</field>
+            <field name="res_model">academico.comunicado</field>
+            <field name="view_mode">tree,form</field>
+          </record>
+          <menuitem name="Comunicados" id="academico.menu_1_comunicado_list" parent="academico.menu_1"
+          action="academico.action_comunicado_window"/>
+        
+    </data>
+</odoo>

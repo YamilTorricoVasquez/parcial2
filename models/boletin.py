@@ -11,7 +11,7 @@ class Boletin(models.Model):
     curso_id = fields.Many2one('academico.curso', string='Curso', compute='_compute_curso', store=True)
     
     nivel_id = fields.Selection(related='curso_id.nivel',string='Nivel')
-    gestion=fields.Date(string="Fecha y año")
+    gestion=fields.Date(string="Fecha y año", required=True)
     nota_ids = fields.One2many('academico.nota', 'boletin_id', string='Notas', store=True)
     estado_aprobacion = fields.Char(string='Estado de Aprobación', compute='_compute_estado_aprobacion', store=True)
     promedio = fields.Float(string='Promedio', compute='_compute_promedio', store=True)

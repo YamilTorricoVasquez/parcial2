@@ -61,7 +61,7 @@
     
       
         <record model="ir.actions.act_window" id="academico.action_boletin_window">
-            <field name="name">Crear Boletin</field>
+            <field name="name">Crear Libreta</field>
             <field name="res_model">academico.boletin</field>
             <field name="view_mode">tree,form</field>
           </record>

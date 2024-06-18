@@ -1,61 +1,41 @@
-from odoo import http, _
-from odoo.http import request, Response
+from odoo import http
+from odoo.http import request
 import json
-import logging
 
-_logger = logging.getLogger(__name__)
+class HorarioController(http.Controller):
 
-class GestionAcademicaController(http.Controller):
-
-    @http.route('/api/horario/estudiante/<string:ci>', type='json', auth='public', methods=['GET', 'OPTIONS'], csrf=False)
-    def get_horario(self, ci, **kwargs):
+    @http.route('/api/horario/estudiante/<string:ci>', type='http', auth='none', methods=['GET'])
+    def get_horario_by_ci(self, ci, **kwargs):
         try:
-            if request.httprequest.method == 'OPTIONS':
-                headers = {
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'GET, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Content-Type',
-                }
-                return Response(status=200, headers=headers)
-
-            if not ci:
-                return Response(
-                    json.dumps({'status': 400, 'message': 'Cédula es requerida'}),
-                    status=400,
-                    headers={'Content-Type': 'application/json'}
-                )
-
-            estudiante = request.env['academico.estudiante'].sudo().search([('ci', '=', ci)], limit=1)
+            # Buscar al estudiante por su CI
+            estudiante = request.env['academico.estudiante'].sudo().search([('ci', '=', ci)])
             if not estudiante:
-                return Response(
-                    json.dumps({'status': 404, 'message': 'Estudiante no encontrado'}),
-                    status=404,
-                    headers={'Content-Type': 'application/json'}
-                )
+                return json.dumps({'error': 'Estudiante no encontrado'})
 
-            horario_data = []
-            horarios = request.env['academico.horario'].sudo().search([('curso_id', '=', estudiante.curso_id.id)])
+            # Obtener el curso del estudiante
+            curso = estudiante.curso_id
+            if not curso:
+                return json.dumps({'error': 'El estudiante no tiene un curso asignado'})
+
+            # Buscar los horarios del curso del estudiante
+            horarios = request.env['academico.horario'].sudo().search([('name', '=', curso.id)])
+            if not horarios:
+                return json.dumps({'error': 'No se encontraron horarios para el curso del estudiante'})
+
+            # Preparar la estructura de datos para los horarios
+            horarios_data = []
             for horario in horarios:
-                horario_data.append({
-                    'curso': horario.curso_id.name,
-                    'nivel': horario.nivel_id.name if horario.nivel_id else None,
+                horarios_data.append({
+                    'curso': curso.name,
+                    'nivel': horario.nivel_id,
                     'materia': horario.materia_id.name,
                     'aula': horario.aula_id.name,
-                    'start_time': horario.start_time,
-                    'end_time': horario.end_time,
+                    'start_time': horario.start_time.strftime('%Y-%m-%d %H:%M:%S'),
+                    'end_time': horario.end_time.strftime('%Y-%m-%d %H:%M:%S'),
+                    
                 })
 
-            return Response(
-                json.dumps({'status': 200, 'data': horario_data}),
-                status=200,
-                headers={'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'}
-            )
+            return json.dumps({'horarios': horarios_data})
+
         except Exception as e:
-            # Registrar el error en los logs de Odoo
-            request.env.cr.rollback()
-            _logger.exception("Error al obtener el horario del estudiante: %s", e)
-            return Response(
-                json.dumps({'status': 500, 'message': 'Internal Server Error'}),
-                status=500,
-                headers={'Content-Type': 'application/json'}
-            )
+            return json.dumps({'error': str(e)})
