@@ -1,20 +1,20 @@
-import json
 from odoo import http
 from odoo.http import request
+import json
 
 class BoletinController(http.Controller):
 
-    @http.route('/api/boletin/<string:ci>', type='http', auth='public', methods=['GET'], csrf=False)
-    def buscar_boletin_por_ci(self, ci, **kwargs):
+    @http.route('/api/boletin/nombre/<string:nombre>', type='http', auth='public', methods=['GET'], csrf=False)
+    def buscar_boletin_por_nombre(self, nombre, **kwargs):
         try:
-            if not ci:
+            if not nombre:
                 return http.Response(
-                    '{"status": 400, "message": "Cédula es requerida"}',
+                    '{"status": 400, "message": "Nombre es requerido"}',
                     status=400,
                     content_type='application/json'
                 )
 
-            estudiante = request.env['academico.estudiante'].sudo().search([('ci', '=', ci)], limit=1)
+            estudiante = request.env['academico.estudiante'].sudo().search([('name', 'ilike', nombre)], limit=1)
             if not estudiante:
                 return http.Response(
                     '{"status": 404, "message": "Estudiante no encontrado"}',
@@ -41,7 +41,7 @@ class BoletinController(http.Controller):
             }
 
             return http.Response(
-                '{"status": 200, "data": ' + json.dumps(boletin_data) + '}',
+                json.dumps({'status': 200, 'data': boletin_data}),
                 status=200,
                 content_type='application/json'
             )
