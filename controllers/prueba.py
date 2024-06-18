@@ -14,7 +14,7 @@ class HelloApi(http.Controller):
                 'email': est.email,
                 'phone': est.phone,
                 'curso_id': est.curso_id.name,
-                'boletin_ids':est.boletin_ids.name
+                
             })
         return request.make_response(
             json.dumps({
