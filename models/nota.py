@@ -12,40 +12,21 @@ class Nota(models.Model):
     
     nota = fields.Float(string='Nota', required=True)
     trimestre = fields.Selection([('1', '1er Trimestre'), ('2', '2do Trimestre'), ('3', '3er Trimestre')], string='Trimestre', required=True)
-    anio= fields.Date(string='año', required=True)
+    anio= fields.Char(string='año', required=True)
     _sql_constraints = [
-      ('unique_estudiante_materia_trimestre', 'UNIQUE(estudiante_id, materia_id, trimestre)', 'Ya existe una nota para esta materia en este trimestre para este estudiante.'),
-        ('check_notas_limit', 'CHECK(_check_notas_limit())', 'No se pueden agregar más de 3 notas para una materia.'),
+        ('unique_nota_estudiante_materia_trimestre_anio', 'UNIQUE(estudiante_id, materia_id, trimestre, anio)', 'Ya existe una nota para este estudiante, materia, trimestre y año.'),
     ]
-   
-    
-    def _check_notas_limit(self):
-        for nota in self:
-            count = self.env['academico.nota'].search_count([
-                ('materia_id', '=', nota.materia_id.id),
-            ])
-            if count >= 3:
-                return False
-        return True
 
-    # @api.constrains('materia_id', 'trimestre')
-    # def _check_unique_materia_trimestre(self):
-    #     for nota in self:
-    #         existing_notas = self.env['academico.nota'].search([
-    #             ('materia_id', '=', nota.materia_id.id),
-    #             ('trimestre', '=', nota.trimestre),
-    #             ('id', '!=', nota.id),  # Excluyendo la nota actual si está siendo actualizada
-    #         ])
-    #         if existing_notas:
-    #             raise exceptions.ValidationError('Ya existe una nota para esta materia en este trimestre.')
-            
-    @api.constrains('estudiante_id', 'materia_id', 'trimestre')
-    def _check_notas_limit(self):
-        for record in self:
-            notas_count = self.search_count([
-                ('estudiante_id', '=', record.estudiante_id.id),
-                ('materia_id', '=', record.materia_id.id),
-                ('trimestre', '=', record.trimestre)
-            ])
-            if notas_count > 3:
-                raise exceptions.ValidationError('No se pueden agregar más de 3 notas para una materia en un trimestre para un estudiante.')
+    @api.model
+    def create(self, vals):
+        # Validar que no se cree una nota duplicada para el mismo estudiante, materia, trimestre y año
+        existing_nota = self.env['academico.nota'].search([
+            ('estudiante_id', '=', vals.get('estudiante_id')),
+            ('materia_id', '=', vals.get('materia_id')),
+            ('trimestre', '=', vals.get('trimestre')),
+            ('anio', '=', vals.get('anio'))
+        ])
+        if existing_nota:
+            raise ValidationError('Ya existe una nota para este estudiante, materia, trimestre y año.')
+
+        return super(Nota, self).create(vals)

@@ -48,9 +48,9 @@
                     <field name="gestion"/>
                     <!-- <field name="notas_materias_trimestres" /> -->
                         
-                        <field name="materias_id" />
+                        <!-- <field name="materias_id" />
                         <field name="notas_id" />
-                        <field name="trimestres_id" />
+                        <field name="trimestres_id" /> -->
                         
                     <field name="promedio"/>
                      <field name="estado_aprobacion" /> 
