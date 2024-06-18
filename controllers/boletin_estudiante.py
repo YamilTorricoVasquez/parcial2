@@ -10,8 +10,8 @@ class BoletinController(http.Controller):
         boletin_list = []
         for boletin in boletines:
             boletin_list.append ({
-                'id': boletin.id,
-                'estudiante': boletin.estudiante_id.name,
+                
+                'estudiante': boletin.estudiante_id,
                 'ci_estudiante': boletin.ci_estudiante,
                 'curso': boletin.curso_id.name,
                 'nivel': boletin.nivel_id,
