@@ -28,16 +28,17 @@ class Nota(models.Model):
                 return False
         return True
 
-    @api.constrains('materia_id', 'trimestre')
-    def _check_unique_materia_trimestre(self):
-        for nota in self:
-            existing_notas = self.env['academico.nota'].search([
-                ('materia_id', '=', nota.materia_id.id),
-                ('trimestre', '=', nota.trimestre),
-                ('id', '!=', nota.id),  # Excluyendo la nota actual si está siendo actualizada
-            ])
-            if existing_notas:
-                raise exceptions.ValidationError('Ya existe una nota para esta materia en este trimestre.')
+    # @api.constrains('materia_id', 'trimestre')
+    # def _check_unique_materia_trimestre(self):
+    #     for nota in self:
+    #         existing_notas = self.env['academico.nota'].search([
+    #             ('materia_id', '=', nota.materia_id.id),
+    #             ('trimestre', '=', nota.trimestre),
+    #             ('id', '!=', nota.id),  # Excluyendo la nota actual si está siendo actualizada
+    #         ])
+    #         if existing_notas:
+    #             raise exceptions.ValidationError('Ya existe una nota para esta materia en este trimestre.')
+            
     @api.constrains('estudiante_id', 'materia_id', 'trimestre')
     def _check_notas_limit(self):
         for record in self:
