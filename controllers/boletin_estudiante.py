@@ -4,7 +4,7 @@ import json
 
 class BoletinController(http.Controller):
 
-    @http.route('/api/boletin/nombre/<string:nombre>', type='http', auth='public', methods=['GET'], csrf=False)
+    @http.route('/api/boletin/nombre/<string:nombre>', type='http', auth='public', methods=['GET'], csrf=False,cors='*')
     def buscar_boletin_por_nombre(self, nombre, **kwargs):
         try:
             if not nombre:
