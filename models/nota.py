@@ -7,6 +7,7 @@ class Nota(models.Model):
     boletin_id = fields.Many2one('academico.boletin', string='Boletín')
     estudiante_id = fields.Many2one('academico.estudiante', string='Estudiante', required=True)
     curso_id = fields.Many2one(related='estudiante_id.curso_id', string='Curso')
+    nivel_id = fields.Many2one(related='estudiante_id.nivel_id', string='Nivel')
     materia_id = fields.Many2one('academico.materia', string='Materia', required=True)
     
     nota = fields.Float(string='Nota', required=True)

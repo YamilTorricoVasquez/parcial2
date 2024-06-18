@@ -11,6 +11,8 @@
                             <!-- <field name="name"/> -->
                             <field name="estudiante_id"/>
                             <field name="curso_id" readonly="1"/>
+                            <field name="nivel_id" readonly="1"/>
+                            
                             <field name="materia_id" />
                             <field name="trimestre"/>
                             <field name="anio" />
@@ -29,6 +31,7 @@
                     <!-- <field name="name"/> -->
                     <field name="estudiante_id"/>
                     <field name="curso_id" readonly="1"/>
+                    <field name="nivel_id" readonly="1"/>
                     <field name="materia_id"/>
                     <field name="trimestre"/>
                     <field name="anio" />
