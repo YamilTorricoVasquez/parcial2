@@ -14,7 +14,7 @@ class Nota(models.Model):
     trimestre = fields.Selection([('1', '1er Trimestre'), ('2', '2do Trimestre'), ('3', '3er Trimestre')], string='Trimestre', required=True)
     anio= fields.Date(string='año', required=True)
     _sql_constraints = [
-        ('unique_materia_trimestre', 'UNIQUE(estudiante_id,materia_id, trimestre)', 'Ya existe una nota para esta materia en este trimestre.'),
+        ('unique_materia_trimestre', 'UNIQUE(estudiante_id, trimestre)', 'Ya existe una nota para esta materia en este trimestre.'),
         ('check_notas_limit', 'CHECK(_check_notas_limit())', 'No se pueden agregar más de 3 notas para una materia.'),
     ]
    
