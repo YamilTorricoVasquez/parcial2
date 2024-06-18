@@ -4,17 +4,17 @@ import json
 
 class BoletinController(http.Controller):
 
-    @http.route('/api/boletin/nombre/<string:nombre>', type='http', auth='public', methods=['GET'], csrf=False,cors='*')
-    def buscar_boletin_por_nombre(self, nombre, **kwargs):
+    @http.route('/api/boletin/ci/<string:ci>', type='http', auth='public', methods=['GET'], csrf=False, cors='*')
+    def buscar_boletin_por_ci(self, ci, **kwargs):
         try:
-            if not nombre:
+            if not ci:
                 return http.Response(
-                    '{"status": 400, "message": "Nombre es requerido"}',
+                    '{"status": 400, "message": "Cédula de identidad es requerida"}',
                     status=400,
                     content_type='application/json'
                 )
 
-            estudiante = request.env['academico.estudiante'].sudo().search([('name', 'ilike', nombre)], limit=1)
+            estudiante = request.env['academico.estudiante'].sudo().search([('ci', '=', ci)], limit=1)
             if not estudiante:
                 return http.Response(
                     '{"status": 404, "message": "Estudiante no encontrado"}',
@@ -25,7 +25,7 @@ class BoletinController(http.Controller):
             boletin = request.env['academico.boletin'].sudo().search([('estudiante_id', '=', estudiante.id)], limit=1)
             if not boletin:
                 return http.Response(
-                    '{"status": 404, "message": "Boletín no encontrado"}',
+                    '{"status": 404, "message": "Boletín no encontrado para este estudiante"}',
                     status=404,
                     content_type='application/json'
                 )
@@ -49,7 +49,7 @@ class BoletinController(http.Controller):
         except Exception as e:
             # Manejar cualquier error y retornar una respuesta adecuada
             return http.Response(
-                '{"status": 500, "message": "Internal Server Error"}',
+                '{"status": 500, "message": "Error interno del servidor"}',
                 status=500,
                 content_type='application/json'
             )
