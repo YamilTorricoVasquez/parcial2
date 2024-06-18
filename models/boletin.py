@@ -11,6 +11,7 @@ class Boletin(models.Model):
     curso_id = fields.Many2one('academico.curso', string='Curso', compute='_compute_curso', store=True)
     
     nivel_id = fields.Selection(related='curso_id.nivel',string='Nivel')
+    año=fields.Date(string="Año")
     nota_ids = fields.One2many('academico.nota', 'boletin_id', string='Notas', store=True)
     estado_aprobacion = fields.Char(string='Estado de Aprobación', compute='_compute_estado_aprobacion', store=True)
     promedio = fields.Float(string='Promedio', compute='_compute_promedio', store=True)
@@ -32,7 +33,7 @@ class Boletin(models.Model):
     def _compute_promedio(self):
         for boletin in self:
             total_notas = sum(boletin.nota_ids.mapped('nota'))
-            boletin.promedio = total_notas / len(boletin.nota_ids) if boletin.nota_ids else 0.0
+            boletin.promedio = total_notas / len(boletin.nota_ids) if boletin.nota_ids else 0.0 #Aqui se hace el promedio de todas las notas 
 
     @api.onchange('estudiante_id')
     def _onchange_estudiante_id(self):
@@ -59,7 +60,7 @@ class Boletin(models.Model):
     def _compute_promedio(self):
         for boletin in self:
             total_notas = sum(boletin.nota_ids.mapped('nota'))
-            boletin.promedio = total_notas / len(boletin.nota_ids) if boletin.nota_ids else 0.0
+            boletin.promedio = total_notas / len(boletin.nota_ids) if boletin.nota_ids else 0.0 #este promedio es dentro del form
 
     # @api.depends('nota_ids')
     # def _compute_notas_materias_trimestres(self):
