@@ -7,8 +7,8 @@ class Nota(models.Model):
     boletin_id = fields.Many2one('academico.boletin', string='Boletín')
     estudiante_id = fields.Many2one('academico.estudiante', string='Estudiante', required=True)
     curso_id = fields.Many2one(related='estudiante_id.curso_id', string='Curso')
-    #materia_id = fields.Many2one('academico.materia', string='Materia', required=True)
-    materia_id = fields.Many2one('academico.materia', string='Materia', required=True, domain="[('id', 'in', curso_id.materia_ids.ids)]")
+    materia_id = fields.Many2one('academico.materia', string='Materia', required=True)
+   
     nota = fields.Float(string='Nota', required=True)
     trimestre = fields.Selection([('1', '1er Trimestre'), ('2', '2do Trimestre'), ('3', '3er Trimestre')], string='Trimestre', required=True)
     anio= fields.Date(string='año', required=True)
