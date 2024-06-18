@@ -66,7 +66,7 @@
             <field name="view_mode">tree,form</field>
           </record>
           
-          <menuitem name="Boletin" id="academico.menu_1_boletin_list" parent="academico.menu_1"
+          <menuitem name="Libreta" id="academico.menu_1_boletin_list" parent="academico.menu_1"
           action="academico.action_boletin_window"/>
     </data>
 </odoo>
