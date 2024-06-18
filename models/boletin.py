@@ -1,4 +1,5 @@
  
+from xml.dom import ValidationErr
 from odoo import models, fields, api
 
 
@@ -16,9 +17,23 @@ class Boletin(models.Model):
     estado_aprobacion = fields.Char(string='Estado de Aprobación', compute='_compute_estado_aprobacion', store=True)
     promedio = fields.Float(string='Promedio', compute='_compute_promedio', store=True)
  # Restricción para permitir solo un boletín por estudiante
+    # Restricción para evitar duplicados de boletines por estudiante en el mismo año
     _sql_constraints = [
-        ('estudiante_uniq', 'UNIQUE(estudiante_id)', 'Ya existe un boletín para este estudiante.'),
+        ('unique_boletin_gestion', 'UNIQUE(estudiante_id, gestion)', 'Ya existe un boletín para este estudiante en el año seleccionado.'),
     ]
+
+    @api.constrains('gestion', 'estudiante_id')
+    def _check_unique_boletin_gestion(self):
+        for boletin in self:
+            # Verificar si ya existe un boletín para este estudiante en el mismo año
+            existing_boletin = self.search([
+                ('estudiante_id', '=', boletin.estudiante_id.id),
+                ('gestion', '=', boletin.gestion),
+                ('id', '!=', boletin.id),  # Excluir el propio registro actual en la búsqueda
+            ])
+            if existing_boletin:
+                raise ValidationErr('Ya existe un boletín para este estudiante en el año seleccionado.')
+            
     @api.depends('promedio')
     def _compute_estado_aprobacion(self):
         for boletin in self:
