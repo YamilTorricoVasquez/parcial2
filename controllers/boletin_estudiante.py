@@ -1,6 +1,7 @@
 from odoo import http
 from odoo.http import request
 import json
+from datetime import date
 
 class BoletinAPI(http.Controller):
 
@@ -30,11 +31,14 @@ class BoletinAPI(http.Controller):
             }
 
             for nota in boletin.nota_ids:
+                # Convertir el campo anio de tipo date a string para serializar a JSON
+                anio_str = nota.anio.strftime('%Y-%m-%d') if nota.anio else None
+
                 boletin_data['notas'].append({
                     'materia': nota.materia_id.name,
                     'nota': nota.nota,
                     'trimestre': nota.trimestre,
-                    'anio': nota.anio,
+                    'anio': anio_str,
                 })
 
             return json.dumps({'boletin': boletin_data})
