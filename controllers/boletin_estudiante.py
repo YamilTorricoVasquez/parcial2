@@ -4,7 +4,7 @@ import json
 
 class BoletinAPI(http.Controller):
 
-    @http.route('/api/boletin/<string:ci>/<string:gestion>', type='http', auth='none', methods=['GET'])
+    @http.route('/api/boletin/<string:ci>/<string:gestion>', type='http', auth='none', methods=['GET'], cors='*')
     def get_boletin_by_ci(self, ci, gestion, **kwargs):
         try:
             # Buscar al estudiante por su CI
