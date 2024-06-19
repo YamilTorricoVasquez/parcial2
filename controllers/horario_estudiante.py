@@ -4,7 +4,7 @@ import json
 
 class HorarioController(http.Controller):
 
-    @http.route('/api/horario/estudiante/<string:ci>', type='http', auth='none', methods=['GET'])
+    @http.route('/api/horario/estudiante/<string:ci>', type='http', auth='none', methods=['GET'], cors='*')
     def get_horario_by_ci(self, ci, **kwargs):
         try:
             # Buscar al estudiante por su CI
